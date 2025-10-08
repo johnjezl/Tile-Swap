@@ -10,3 +10,10 @@ This game was completely vibe coded usig Claude Code 2.0.1. The prompts used are
 
 - Python 3.x (no additional libraries required)
 - Works on Windows and macOS
+
+## How to Run
+
+```bash
+python graph_tile_game.py
+
+```
