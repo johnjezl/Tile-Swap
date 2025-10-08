@@ -1,0 +1,7 @@
+# Sample graph file
+# Each line contains an edge: node1 node2
+1 2
+2 3
+3 4
+4 1
+1 3
