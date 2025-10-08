@@ -88,6 +88,12 @@ class TileSwapGame:
         self.initial_tiles = self.tile_manager.get_initial_configuration()
         self.optimal_moves = ScoreCalculator.calculate_optimal_moves(self.initial_tiles)
 
+        # Display adjacency matrix after tiles are assigned
+        print("\n" + "="*50)
+        print("TILE ASSIGNMENT COMPLETE")
+        print("="*50)
+        self.display.display_adjacency_matrix()
+
         return True
 
     def play(self):
@@ -97,10 +103,6 @@ class TileSwapGame:
         print("\n" + "="*50)
         print("TILE SWAP - GAME START")
         print("="*50)
-
-        # Show adjacency matrix at start for reference (large graphs only)
-        if len(self.graph.get_nodes()) > 10:
-            self.display.display_adjacency_matrix()
 
         self.display.display_tiles()
 

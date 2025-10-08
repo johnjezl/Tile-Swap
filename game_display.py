@@ -133,7 +133,7 @@ class GameDisplay:
         print("=" * 80)
 
         # Header - fixed width for alignment
-        print("       ", end="")
+        print("         ", end="")
         for node in nodes:
             tile = self.graph.tiles.get(node, '?')
             match = '=' if tile == node else '!'
@@ -148,11 +148,11 @@ class GameDisplay:
 
             for node2 in nodes:
                 if node1 == node2:
-                    print("  ·   ", end="")
+                    print("  ·     ", end="")
                 elif node2 in self.graph.get_neighbors(node1):
-                    print("  1   ", end="")
+                    print("  1     ", end="")
                 else:
-                    print("  0   ", end="")
+                    print("  0     ", end="")
             print()
 
         print("=" * 80)
