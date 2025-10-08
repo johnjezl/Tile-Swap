@@ -4,7 +4,7 @@ A Python puzzle game where players create a connected graph and swap tiles betwe
 
 ## Disclosures
 
-This game was completely vibe coded usig Claude Code 2.0.1. The prompts used are included in the file 'Claude Code Prompts' 
+This game was completely vibe coded usig Claude Code 2.0.1. The prompts used are included in the file 'CLAUDE CODE SESSION.md' 
 
 ## Requirements
 
