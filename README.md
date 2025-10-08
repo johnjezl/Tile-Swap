@@ -131,3 +131,28 @@ Current Tile Assignments:
 Current Score (moves): 1
 
 ```
+
+## Features
+
+- Three graph creation methods (manual, file, random)
+- Ensures graph connectivity
+- Two tile assignment methods (manual, random)
+- **ASCII art graph visualization** (circular layout for small graphs, matrix for large)
+- Move validation (only connected nodes)
+- Real-time score tracking
+- Optimal solution calculation using cycle decomposition
+- Performance rating on completion
+- Quit option at every step
+- Clear visual feedback with matched tile indicators
+
+## Algorithm Notes
+
+The optimal solution is calculated using **cycle decomposition** of the permutation:
+
+- Each cycle of length n requires n-1 swaps to resolve
+- This gives the theoretical minimum number of swaps needed
+- Note: The graph structure may make the optimal solution unreachable if not all swaps are possible
+
+Enjoy the puzzle!
+
+#
