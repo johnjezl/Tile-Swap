@@ -117,6 +117,63 @@ def reset():
     return jsonify({'success': True})
 
 
+@app.route('/api/undo', methods=['POST'])
+def undo():
+    """Undo the last move."""
+    game = get_game_state()
+    result = game.undo_move()
+
+    if not result['success']:
+        return jsonify(result), 400
+
+    result['state'] = game.get_game_state()
+    return jsonify(result)
+
+
+@app.route('/api/redo', methods=['POST'])
+def redo():
+    """Redo a previously undone move."""
+    game = get_game_state()
+    result = game.redo_move()
+
+    if not result['success']:
+        return jsonify(result), 400
+
+    result['state'] = game.get_game_state()
+    return jsonify(result)
+
+
+@app.route('/api/save', methods=['GET'])
+def save():
+    """Save current game state."""
+    game = get_game_state()
+    save_data = game.save_game()
+
+    if save_data is None:
+        return jsonify({'success': False, 'message': 'No game to save'}), 400
+
+    return jsonify({'success': True, 'data': save_data})
+
+
+@app.route('/api/load', methods=['POST'])
+def load():
+    """Load a saved game state."""
+    data = request.get_json()
+    save_data = data.get('data')
+
+    if not save_data:
+        return jsonify({'success': False, 'message': 'No save data provided'}), 400
+
+    game = get_game_state()
+    if not game.load_game(save_data):
+        return jsonify({'success': False, 'message': 'Failed to load game'}), 400
+
+    return jsonify({
+        'success': True,
+        'state': game.get_game_state()
+    })
+
+
 if __name__ == '__main__':
     print("="*50)
     print("TILE SWAP - WEB INTERFACE")

@@ -1,7 +1,7 @@
 /**
- * Tile Swap Game - Stylesheet
+ * Tile Swap Game - Enhanced Stylesheet
  *
- * Modern, clean styling for the web interface.
+ * Features: Modern design, dark mode, animations, graph editor, and responsive layout.
  */
 
 * {
@@ -10,12 +10,34 @@
     box-sizing: border-box;
 }
 
+:root {
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --bg-color: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+    --hover-shadow: rgba(102, 126, 234, 0.4);
+    --canvas-bg: #fafafa;
+    --section-bg: #f8f9fa;
+}
+
+body.dark-mode {
+    --bg-color: linear-gradient(135deg, #2a2a4e 0%, #3e2a4b 100%);
+    --card-bg: #2a2a4e;
+    --text-color: #e0e0e0;
+    --border-color: #444;
+    --hover-shadow: rgba(102, 126, 234, 0.6);
+    --canvas-bg: #1a1a2e;
+    --section-bg: #353560;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--bg-color);
     min-height: 100vh;
     padding: 20px;
-    color: #333;
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
 }
 
 .container {
@@ -23,10 +45,15 @@ body {
     margin: 0 auto;
 }
 
+/* ============================================================================
+   HEADER
+   ============================================================================ */
+
 header {
     text-align: center;
     color: white;
     margin-bottom: 30px;
+    position: relative;
 }
 
 header h1 {
@@ -40,16 +67,54 @@ header h1 {
     opacity: 0.9;
 }
 
+.dark-mode-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 1.5em;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dark-mode-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+body:not(.dark-mode) .dark-mode-btn .icon-dark {
+    display: none;
+}
+
+body.dark-mode .dark-mode-btn .icon-light {
+    display: none;
+}
+
+/* ============================================================================
+   GAME CONTAINER
+   ============================================================================ */
+
 .game-container {
     display: flex;
     gap: 20px;
-    background: white;
+    background: var(--card-bg);
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    transition: background 0.3s;
 }
 
-/* Control Panel */
+/* ============================================================================
+   CONTROL PANEL
+   ============================================================================ */
+
 .control-panel {
     width: 300px;
     flex-shrink: 0;
@@ -59,10 +124,11 @@ header h1 {
 }
 
 .controls-section {
-    background: #f8f9fa;
+    background: var(--section-bg);
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .controls-section h2 {
@@ -88,16 +154,18 @@ header h1 {
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
-    color: #555;
+    color: var(--text-color);
 }
 
 .control-group input {
     width: 100%;
     padding: 8px 12px;
-    border: 2px solid #ddd;
+    border: 2px solid var(--border-color);
     border-radius: 5px;
     font-size: 1em;
     transition: border-color 0.3s;
+    background: var(--card-bg);
+    color: var(--text-color);
 }
 
 .control-group input:focus {
@@ -105,7 +173,10 @@ header h1 {
     border-color: #667eea;
 }
 
-/* Buttons */
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+
 .btn {
     padding: 12px 24px;
     border: none;
@@ -118,25 +189,52 @@ header h1 {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--primary-gradient);
     color: white;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 5px 15px var(--hover-shadow);
 }
 
-.btn-primary:active {
+.btn-primary:active:not(:disabled) {
     transform: translateY(0);
 }
 
-/* Game Info */
+.btn-secondary {
+    background: var(--section-bg);
+    color: var(--text-color);
+    border: 2px solid var(--border-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* ============================================================================
+   GAME INFO
+   ============================================================================ */
+
 .info-item {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     padding: 10px 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .info-item:last-child {
@@ -145,7 +243,7 @@ header h1 {
 
 .info-item .label {
     font-weight: 600;
-    color: #555;
+    color: var(--text-color);
 }
 
 .info-item .value {
@@ -154,11 +252,25 @@ header h1 {
     font-size: 1.1em;
 }
 
-/* Instructions */
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.toggle-label input[type="checkbox"] {
+    width: auto;
+}
+
+/* ============================================================================
+   INSTRUCTIONS
+   ============================================================================ */
+
 .instructions {
     padding-left: 20px;
     line-height: 1.8;
-    color: #555;
+    color: var(--text-color);
 }
 
 .instructions li {
@@ -169,12 +281,13 @@ header h1 {
 .legend {
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 1px solid #ddd;
+    border-top: 1px solid var(--border-color);
 }
 
 .legend p {
     margin: 8px 0;
     line-height: 1.6;
+    color: var(--text-color);
 }
 
 .legend .matched {
@@ -192,17 +305,21 @@ header h1 {
     font-weight: 600;
 }
 
-/* Canvas Container */
+/* ============================================================================
+   CANVAS CONTAINER
+   ============================================================================ */
+
 .canvas-container {
     flex: 1;
     position: relative;
-    background: #fafafa;
+    background: var(--canvas-bg);
     border-radius: 10px;
-    border: 2px solid #e0e0e0;
+    border: 2px solid var(--border-color);
     min-height: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background 0.3s, border-color 0.3s;
 }
 
 #game-canvas {
@@ -211,7 +328,10 @@ header h1 {
     max-height: 100%;
 }
 
-/* Message Overlay */
+/* ============================================================================
+   MESSAGE OVERLAY
+   ============================================================================ */
+
 .message-overlay {
     position: absolute;
     top: 0;
@@ -224,6 +344,7 @@ header h1 {
     justify-content: center;
     border-radius: 10px;
     z-index: 1000;
+    animation: fadeIn 0.3s;
 }
 
 .message-overlay.hidden {
@@ -231,12 +352,13 @@ header h1 {
 }
 
 .message-content {
-    background: white;
+    background: var(--card-bg);
     padding: 40px;
     border-radius: 15px;
     max-width: 500px;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s;
 }
 
 .message-content h2 {
@@ -246,13 +368,114 @@ header h1 {
 }
 
 .message-content p {
-    color: #555;
+    color: var(--text-color);
     line-height: 1.8;
     margin-bottom: 20px;
     white-space: pre-line;
 }
 
-/* Responsive Design */
+/* ============================================================================
+   GRAPH EDITOR OVERLAY
+   ============================================================================ */
+
+.editor-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    z-index: 2000;
+    animation: fadeIn 0.3s;
+}
+
+.editor-overlay.hidden {
+    display: none;
+}
+
+.editor-content {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    max-width: 900px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    animation: slideIn 0.3s;
+}
+
+.editor-content h2 {
+    color: #667eea;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+.editor-instructions {
+    color: var(--text-color);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+#editor-canvas {
+    display: block;
+    background: var(--canvas-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    cursor: crosshair;
+}
+
+.editor-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.editor-controls .btn {
+    flex: 1;
+}
+
+.editor-status {
+    text-align: center;
+    color: var(--text-color);
+    font-size: 0.9em;
+}
+
+.editor-status strong {
+    color: #667eea;
+    font-weight: 700;
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
 @media (max-width: 1024px) {
     .game-container {
         flex-direction: column;
@@ -264,6 +487,11 @@ header h1 {
 
     .canvas-container {
         min-height: 500px;
+    }
+
+    .dark-mode-btn {
+        position: relative;
+        margin: 0 auto 20px;
     }
 }
 
@@ -288,4 +516,44 @@ header h1 {
         padding: 30px;
         max-width: 90%;
     }
+
+    .editor-content {
+        padding: 20px;
+        max-width: 95%;
+    }
+
+    #editor-canvas {
+        width: 100%;
+        height: auto;
+    }
+
+    .button-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus styles for keyboard navigation */
+.btn:focus,
+input:focus {
+    outline: 3px solid #667eea;
+    outline-offset: 2px;
+}
+
+body.dark-mode .btn:focus,
+body.dark-mode input:focus {
+    outline-color: #9f7aea;
 }

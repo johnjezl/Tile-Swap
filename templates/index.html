@@ -11,6 +11,10 @@
         <header>
             <h1>Tile Swap</h1>
             <p class="subtitle">Interactive Graph Puzzle Game</p>
+            <button id="dark-mode-toggle" class="dark-mode-btn" title="Toggle Dark Mode">
+                <span class="icon-light">☀️</span>
+                <span class="icon-dark">🌙</span>
+            </button>
         </header>
 
         <div class="game-container">
@@ -23,6 +27,21 @@
                         <input type="number" id="num-nodes" min="3" max="15" value="6">
                     </div>
                     <button id="new-game-btn" class="btn btn-primary">New Random Game</button>
+                    <button id="custom-graph-btn" class="btn btn-secondary">Custom Graph Editor</button>
+                </div>
+
+                <div class="controls-section" id="game-controls">
+                    <h2>Game Controls</h2>
+                    <div class="button-grid">
+                        <button id="undo-btn" class="btn btn-secondary" disabled>
+                            <span>↶ Undo</span>
+                        </button>
+                        <button id="redo-btn" class="btn btn-secondary" disabled>
+                            <span>↷ Redo</span>
+                        </button>
+                    </div>
+                    <button id="save-btn" class="btn btn-secondary" style="margin-top: 10px;">💾 Save Game</button>
+                    <button id="load-btn" class="btn btn-secondary" style="margin-top: 5px;">📂 Load Game</button>
                 </div>
 
                 <div class="controls-section" id="game-info">
@@ -39,15 +58,22 @@
                         <span class="label">Status:</span>
                         <span id="game-status" class="value">Not started</span>
                     </div>
+                    <div class="info-item">
+                        <label class="toggle-label">
+                            <input type="checkbox" id="sound-toggle" checked>
+                            <span>Sound Effects</span>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="controls-section">
                     <h2>Instructions</h2>
                     <ol class="instructions">
-                        <li>Create a new game using the button above</li>
-                        <li>Click on a node to select it (it will highlight)</li>
-                        <li>Click on a connected node to swap their tiles</li>
-                        <li>Match all tiles to their node numbers to win!</li>
+                        <li>Create a new game or use the graph editor</li>
+                        <li>Click on a node to select it (yellow outline)</li>
+                        <li>Click on a connected node to swap tiles</li>
+                        <li>Use undo/redo to navigate your moves</li>
+                        <li>Match all tiles to win!</li>
                     </ol>
                     <div class="legend">
                         <h3>Legend</h3>
@@ -68,9 +94,34 @@
                         <button id="message-close" class="btn btn-primary">Close</button>
                     </div>
                 </div>
+
+                <!-- Graph Editor Overlay -->
+                <div id="editor-overlay" class="editor-overlay hidden">
+                    <div class="editor-content">
+                        <h2>Custom Graph Editor</h2>
+                        <p class="editor-instructions">
+                            Click to add nodes. Click and drag from one node to another to add edges.
+                            Right-click a node to delete it (and its edges).
+                        </p>
+                        <canvas id="editor-canvas" width="800" height="500"></canvas>
+                        <div class="editor-controls">
+                            <button id="editor-done" class="btn btn-primary">Start Game</button>
+                            <button id="editor-clear" class="btn btn-secondary">Clear All</button>
+                            <button id="editor-cancel" class="btn btn-secondary">Cancel</button>
+                        </div>
+                        <div class="editor-status">
+                            <span>Nodes: <strong id="editor-node-count">0</strong></span>
+                            <span style="margin-left: 20px;">Edges: <strong id="editor-edge-count">0</strong></span>
+                            <span style="margin-left: 20px;" id="editor-connected-status"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Hidden file input for loading games -->
+    <input type="file" id="file-input" accept=".json" style="display: none;">
 
     <script src="{{ url_for('static', filename='game.js') }}"></script>
 </body>

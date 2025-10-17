@@ -182,6 +182,13 @@ Current Score (moves): 1
 
 ### Web Interface
 - **Interactive HTML5 canvas visualization** with circular graph layout
+- **Drag-and-drop custom graph editor** - Create your own graphs visually!
+- **Animated tile swaps** - Smooth transitions when tiles are swapped
+- **Undo/redo functionality** - Navigate through your move history
+- **Save/load game states** - Save progress and load it later
+- **Dark mode** - Toggle between light and dark themes (preference persisted)
+- **Sound effects** - Audio feedback for swaps, clicks, and victory
+- **Keyboard shortcuts** - Ctrl+Z/Ctrl+Shift+Z for undo/redo, Ctrl+S to save
 - Click-to-play interaction (no typing required)
 - Color-coded nodes (green for matched, blue for unmatched)
 - Hover effects and visual feedback

@@ -14,7 +14,7 @@ import math
 
 
 class WebGameState:
-    """Manages game state for web interface."""
+    """Manages game state for web interface with enhanced features."""
 
     def __init__(self):
         self.graph = None
@@ -23,6 +23,8 @@ class WebGameState:
         self.initial_tiles = None
         self.optimal_moves = 0
         self.game_active = False
+        self.move_history = []  # For undo/redo: list of (node1, node2) tuples
+        self.redo_stack = []    # For redo functionality
 
     def create_random_graph(self, num_nodes=6, num_edges=None):
         """Create a random connected graph."""
@@ -93,13 +95,79 @@ class WebGameState:
         if not self.graph.are_connected(node1, node2):
             return {'success': False, 'message': 'Nodes are not connected'}
 
+        # Record move for undo
+        self.move_history.append((node1, node2))
+        # Clear redo stack when new move is made
+        self.redo_stack = []
+
         self.tile_manager.swap_tiles(node1, node2)
         self.move_count += 1
 
         result = {
             'success': True,
             'move_count': self.move_count,
-            'solved': self.tile_manager.is_solved()
+            'solved': self.tile_manager.is_solved(),
+            'can_undo': len(self.move_history) > 0,
+            'can_redo': len(self.redo_stack) > 0
+        }
+
+        if result['solved']:
+            self.game_active = False
+            result['optimal_moves'] = self.optimal_moves
+
+        return result
+
+    def undo_move(self):
+        """
+        Undo the last move.
+
+        Returns:
+            dict with 'success' boolean and updated state
+        """
+        if not self.move_history:
+            return {'success': False, 'message': 'No moves to undo'}
+
+        # Get last move and remove from history
+        node1, node2 = self.move_history.pop()
+        # Add to redo stack
+        self.redo_stack.append((node1, node2))
+
+        # Swap back
+        self.tile_manager.swap_tiles(node1, node2)
+        self.move_count = max(0, self.move_count - 1)
+
+        return {
+            'success': True,
+            'move_count': self.move_count,
+            'can_undo': len(self.move_history) > 0,
+            'can_redo': len(self.redo_stack) > 0
+        }
+
+    def redo_move(self):
+        """
+        Redo a previously undone move.
+
+        Returns:
+            dict with 'success' boolean and updated state
+        """
+        if not self.redo_stack:
+            return {'success': False, 'message': 'No moves to redo'}
+
+        # Get move from redo stack
+        node1, node2 = self.redo_stack.pop()
+        # Add back to history
+        self.move_history.append((node1, node2))
+
+        # Swap tiles
+        self.tile_manager.swap_tiles(node1, node2)
+        self.move_count += 1
+
+        result = {
+            'success': True,
+            'move_count': self.move_count,
+            'solved': self.tile_manager.is_solved(),
+            'can_undo': len(self.move_history) > 0,
+            'can_redo': len(self.redo_stack) > 0
         }
 
         if result['solved']:
@@ -152,8 +220,72 @@ class WebGameState:
             'node_positions': node_positions,
             'tiles': tiles,
             'move_count': self.move_count,
-            'optimal_moves': self.optimal_moves
+            'optimal_moves': self.optimal_moves,
+            'can_undo': len(self.move_history) > 0,
+            'can_redo': len(self.redo_stack) > 0
         }
+
+    def save_game(self):
+        """
+        Export current game state for saving.
+
+        Returns:
+            dict with complete game state
+        """
+        if not self.graph:
+            return None
+
+        nodes = self.graph.get_nodes()
+        edges = []
+        for node in nodes:
+            for neighbor in self.graph.get_neighbors(node):
+                if node < neighbor:
+                    edges.append([node, neighbor])
+
+        return {
+            'version': '1.0',
+            'edges': edges,
+            'tiles': {str(k): v for k, v in self.graph.tiles.items()},
+            'initial_tiles': {str(k): v for k, v in self.initial_tiles.items()} if self.initial_tiles else {},
+            'move_count': self.move_count,
+            'optimal_moves': self.optimal_moves,
+            'game_active': self.game_active,
+            'move_history': self.move_history,
+            'redo_stack': self.redo_stack
+        }
+
+    def load_game(self, save_data):
+        """
+        Restore game state from saved data.
+
+        Args:
+            save_data: dict from save_game()
+
+        Returns:
+            True if successful, False otherwise
+        """
+        try:
+            # Recreate graph
+            edges = [(e[0], e[1]) for e in save_data['edges']]
+            if not self.create_graph_from_edges(edges):
+                return False
+
+            # Restore tiles
+            tiles = {int(k): v for k, v in save_data['tiles'].items()}
+            self.tile_manager.assign_tiles(tiles)
+
+            # Restore game state
+            self.initial_tiles = {int(k): v for k, v in save_data['initial_tiles'].items()}
+            self.move_count = save_data['move_count']
+            self.optimal_moves = save_data['optimal_moves']
+            self.game_active = save_data['game_active']
+            self.move_history = save_data.get('move_history', [])
+            self.redo_stack = save_data.get('redo_stack', [])
+
+            return True
+        except Exception as e:
+            print(f"Error loading game: {e}")
+            return False
 
     def reset_game(self):
         """Reset the game state."""
@@ -163,3 +295,5 @@ class WebGameState:
         self.initial_tiles = None
         self.optimal_moves = 0
         self.game_active = False
+        self.move_history = []
+        self.redo_stack = []
