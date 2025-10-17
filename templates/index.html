@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tile Swap - Interactive Graph Puzzle</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Tile Swap</h1>
+            <p class="subtitle">Interactive Graph Puzzle Game</p>
+        </header>
+
+        <div class="game-container">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="controls-section">
+                    <h2>Game Setup</h2>
+                    <div class="control-group">
+                        <label for="num-nodes">Number of Nodes:</label>
+                        <input type="number" id="num-nodes" min="3" max="15" value="6">
+                    </div>
+                    <button id="new-game-btn" class="btn btn-primary">New Random Game</button>
+                </div>
+
+                <div class="controls-section" id="game-info">
+                    <h2>Game Status</h2>
+                    <div class="info-item">
+                        <span class="label">Moves:</span>
+                        <span id="move-count" class="value">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Optimal:</span>
+                        <span id="optimal-moves" class="value">0</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Status:</span>
+                        <span id="game-status" class="value">Not started</span>
+                    </div>
+                </div>
+
+                <div class="controls-section">
+                    <h2>Instructions</h2>
+                    <ol class="instructions">
+                        <li>Create a new game using the button above</li>
+                        <li>Click on a node to select it (it will highlight)</li>
+                        <li>Click on a connected node to swap their tiles</li>
+                        <li>Match all tiles to their node numbers to win!</li>
+                    </ol>
+                    <div class="legend">
+                        <h3>Legend</h3>
+                        <p><span class="matched">Green nodes</span> = Tiles matched</p>
+                        <p><span class="unmatched">Blue nodes</span> = Not matched</p>
+                        <p><span class="selected">Yellow outline</span> = Selected</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Game Canvas -->
+            <div class="canvas-container">
+                <canvas id="game-canvas" width="800" height="600"></canvas>
+                <div id="message-overlay" class="message-overlay hidden">
+                    <div class="message-content">
+                        <h2 id="message-title"></h2>
+                        <p id="message-text"></p>
+                        <button id="message-close" class="btn btn-primary">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='game.js') }}"></script>
+</body>
+</html>

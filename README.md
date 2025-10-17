@@ -8,15 +8,46 @@ This game was completely vibe coded usig Claude Code 2.0.1. The prompts used are
 
 ## Requirements
 
+### Command Line Interface
 - Python 3.x (no additional libraries required)
 - Works on Windows and macOS
 
+### Web Interface (NEW!)
+- Python 3.x
+- Flask 3.0.0
+- Works on all platforms with a modern web browser
+
 ## How to Run
+
+### Command Line Interface
 
 ```bash
 python graph_tile_game.py
-
 ```
+
+### Web Interface (NEW!)
+
+The game now includes a modern web interface with interactive graph visualization!
+
+1. Install required dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Start the web server:
+```bash
+python web_app.py
+```
+
+3. Open your browser to: **http://localhost:5000**
+
+**Web Interface Features:**
+- Interactive canvas where you can click nodes to swap tiles
+- Real-time visual feedback with color-coded nodes (green = matched, blue = unmatched)
+- Click a node to select it (yellow outline), then click a connected node to swap
+- Smooth animations and hover effects
+- Responsive design that works on desktop and mobile
+- All the same game logic as the command-line version
 
 ## Game Instructions
 
@@ -134,16 +165,58 @@ Current Score (moves): 1
 
 ## Features
 
+### Core Game Features
 - Three graph creation methods (manual, file, random)
 - Ensures graph connectivity
 - Two tile assignment methods (manual, random)
-- **ASCII art graph visualization** (circular layout for small graphs, matrix for large)
 - Move validation (only connected nodes)
 - Real-time score tracking
 - Optimal solution calculation using cycle decomposition
 - Performance rating on completion
-- Quit option at every step
 - Clear visual feedback with matched tile indicators
+
+### Command Line Interface
+- **ASCII art graph visualization** (circular layout for small graphs, matrix for large)
+- Quit option at every step
+- Text-based interaction
+
+### Web Interface
+- **Interactive HTML5 canvas visualization** with circular graph layout
+- Click-to-play interaction (no typing required)
+- Color-coded nodes (green for matched, blue for unmatched)
+- Hover effects and visual feedback
+- Victory modal with performance analysis
+- Modern, responsive design
+- Session-based multiplayer support (different users get different game states)
+
+## Modular Architecture
+
+The codebase is designed with modularity in mind, making it easy to switch between interfaces or add new ones:
+
+### Core Modules (Shared by both interfaces)
+- **graph.py** - Graph data structure and connectivity logic
+- **graph_builder.py** - Factory for creating graphs (manual, file, random)
+- **tile_manager.py** - Tile assignment and swap operations
+- **score_calculator.py** - Optimal solution calculation using cycle decomposition
+- **game_display.py** - Display logic for command-line interface
+
+### Command Line Interface
+- **graph_tile_game.py** - Original monolithic version
+- **tile_swap_game.py** - Modular game controller for CLI
+- **tile_swap.py** - Entry point for modular CLI version
+
+### Web Interface
+- **web_game_state.py** - Game state manager for web (adapts core modules to web API)
+- **web_app.py** - Flask application with REST API endpoints
+- **templates/index.html** - HTML5 game interface
+- **static/game.js** - Interactive canvas visualization and game logic
+- **static/style.css** - Modern, responsive styling
+
+The modular design means:
+- Core game logic is reused between both interfaces
+- Adding a new interface only requires creating an adapter (like `web_game_state.py`)
+- Business logic is completely separated from presentation
+- Easy to test, maintain, and extend
 
 ## Algorithm Notes
 

@@ -203,3 +203,53 @@ class GraphBuilder:
 
         print(f"Generated random graph with {num_nodes} nodes and {edges_added} edges.")
         return graph
+
+    @staticmethod
+    def create_random_with_params(num_nodes, num_edges):
+        """
+        Generate a random connected graph with specified parameters.
+
+        Args:
+            num_nodes: Number of nodes to create
+            num_edges: Number of edges to create
+
+        Returns:
+            Graph object or None if invalid parameters
+        """
+        if num_nodes < 2 or num_nodes > 20:
+            return None
+
+        min_edges = num_nodes - 1
+        max_edges = num_nodes * (num_nodes - 1) // 2
+
+        if num_edges < min_edges or num_edges > max_edges:
+            return None
+
+        graph = Graph()
+        nodes = list(range(1, num_nodes + 1))
+
+        # Create a random spanning tree to ensure connectivity
+        remaining_nodes = nodes[1:]
+        random.shuffle(remaining_nodes)
+        connected_nodes = [nodes[0]]
+
+        for node in remaining_nodes:
+            connect_to = random.choice(connected_nodes)
+            graph.add_edge(node, connect_to)
+            connected_nodes.append(node)
+
+        # Add additional random edges
+        edges_added = num_nodes - 1
+        max_attempts = num_edges * 3
+        attempts = 0
+
+        while edges_added < num_edges and attempts < max_attempts:
+            attempts += 1
+            node1 = random.choice(nodes)
+            node2 = random.choice(nodes)
+
+            if node1 != node2 and node2 not in graph.get_neighbors(node1):
+                graph.add_edge(node1, node2)
+                edges_added += 1
+
+        return graph
