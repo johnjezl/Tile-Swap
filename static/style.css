@@ -557,3 +557,234 @@ body.dark-mode .btn:focus,
 body.dark-mode input:focus {
     outline-color: #9f7aea;
 }
+
+/* ============================================================================
+   MULTIPLAYER UI
+   ============================================================================ */
+
+/* Mode Tabs */
+.mode-tabs {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.mode-tab {
+    flex: 1;
+    padding: 10px;
+    border: 2px solid var(--border-color);
+    background: var(--card-bg);
+    color: var(--text-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+}
+
+.mode-tab:hover {
+    background: var(--section-bg);
+}
+
+.mode-tab.active {
+    background: var(--primary-gradient);
+    color: white;
+    border-color: #667eea;
+}
+
+/* Divider */
+.divider {
+    text-align: center;
+    margin: 15px 0;
+    color: var(--text-color);
+    opacity: 0.5;
+    font-weight: 600;
+}
+
+/* Select Dropdown */
+select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    font-size: 1em;
+    background: var(--card-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+/* Lobby */
+.lobby-info {
+    padding: 10px;
+    background: var(--section-bg);
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.lobby-info p {
+    margin: 5px 0;
+    color: var(--text-color);
+}
+
+.players-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.lobby-player {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 10px;
+    margin: 3px 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.lobby-player-you {
+    background: rgba(102, 126, 234, 0.1);
+    border-color: #667eea;
+    font-weight: 600;
+}
+
+.lobby-player-status {
+    color: #4CAF50;
+    font-size: 1.2em;
+}
+
+.lobby-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Leaderboard */
+.leaderboard-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.leaderboard-player {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto;
+    gap: 10px;
+    align-items: center;
+    padding: 10px;
+    margin: 5px 0;
+    background: var(--section-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.leaderboard-player-you {
+    background: rgba(102, 126, 234, 0.15);
+    border-color: #667eea;
+    font-weight: 600;
+}
+
+.leaderboard-player-finished {
+    background: rgba(76, 175, 80, 0.1);
+    border-color: #4CAF50;
+}
+
+.leaderboard-rank {
+    font-weight: 700;
+    font-size: 1.1em;
+    color: #667eea;
+    text-align: center;
+}
+
+.leaderboard-name {
+    color: var(--text-color);
+}
+
+.leaderboard-moves {
+    color: var(--text-color);
+    opacity: 0.8;
+    font-size: 0.9em;
+}
+
+.turn-indicator {
+    color: #FFC107;
+    font-size: 1.2em;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Name Change Section */
+.name-change-section {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+    padding: 0;
+    background: transparent;
+    border-radius: 5px;
+}
+
+.name-change-section input {
+    flex: 0 1 auto;
+    width: 180px;
+    max-width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #333;
+    font-size: 14px;
+}
+
+body.dark-mode .name-change-section input {
+    background: #2a2a3e;
+    color: #ffffff;
+    border-color: #555;
+}
+
+.name-change-section input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.btn-small {
+    padding: 8px 16px;
+    font-size: 14px;
+}
+
+/* Hidden class */
+.hidden {
+    display: none !important;
+}
+
+/* Scrollbar styling for dark mode */
+body.dark-mode .players-list::-webkit-scrollbar,
+body.dark-mode .leaderboard-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+body.dark-mode .players-list::-webkit-scrollbar-track,
+body.dark-mode .leaderboard-list::-webkit-scrollbar-track {
+    background: var(--section-bg);
+}
+
+body.dark-mode .players-list::-webkit-scrollbar-thumb,
+body.dark-mode .leaderboard-list::-webkit-scrollbar-thumb {
+    background: #667eea;
+    border-radius: 4px;
+}
+
+body.dark-mode .players-list::-webkit-scrollbar-thumb:hover,
+body.dark-mode .leaderboard-list::-webkit-scrollbar-thumb:hover {
+    background: #764ba2;
+}

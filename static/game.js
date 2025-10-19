@@ -114,7 +114,7 @@ class GraphEditor {
         this.nodes = [];
         this.edges = [];
         this.nextNodeId = 1;
-        this.nodeRadius = 25;
+        this.nodeRadius = 40; // Increased from 25 to match game nodes
         this.draggingFrom = null;
         this.dragLine = null;
 
@@ -333,7 +333,7 @@ class TileSwapGame {
         this.gameState = null;
         this.selectedNode = null;
         this.hoveredNode = null;
-        this.nodeRadius = 30;
+        this.nodeRadius = 40; // Increased from 30 to 40 for better tile display
         this.soundEffects = new SoundEffects();
         this.editor = null;
 
@@ -341,6 +341,9 @@ class TileSwapGame {
         this.animating = false;
         this.animationProgress = 0;
         this.animatingNodes = null;
+
+        // Multiplayer state - hide tiles until game starts
+        this.showTiles = true; // Default to true for single player
 
         this.setupEventListeners();
         this.resizeCanvas();
@@ -484,8 +487,9 @@ class TileSwapGame {
         this.draw();
     }
 
-    async newGame() {
-        const numNodes = parseInt(document.getElementById('num-nodes').value);
+    async newGame(numNodesParam) {
+        // Use parameter if provided (multiplayer), otherwise read from input (single player)
+        const numNodes = numNodesParam || parseInt(document.getElementById('num-nodes').value);
 
         try {
             const response = await fetch('/api/new_game', {
@@ -853,11 +857,14 @@ class TileSwapGame {
             this.ctx.beginPath();
             this.ctx.arc(pos.x, pos.y, this.nodeRadius, 0, 2 * Math.PI);
 
-            // Fill color based on matched status
-            if (tileInfo.matched) {
+            // Fill color based on matched status (only if showing tiles)
+            if (this.showTiles && tileInfo.matched) {
                 this.ctx.fillStyle = '#4CAF50';
-            } else {
+            } else if (this.showTiles) {
                 this.ctx.fillStyle = '#2196F3';
+            } else {
+                // Preview mode (no tiles shown) - neutral color
+                this.ctx.fillStyle = isDark ? '#555' : '#999';
             }
             this.ctx.fill();
 
@@ -867,16 +874,38 @@ class TileSwapGame {
                 (isHovered ? (isDark ? '#888' : '#666') : (isDark ? '#555' : '#333'));
             this.ctx.stroke();
 
-            // Draw node number (small, top)
+            // Draw node number
             this.ctx.fillStyle = '#fff';
-            this.ctx.font = 'bold 12px Arial';
+            this.ctx.font = 'bold 14px Arial';
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
-            this.ctx.fillText(`Node ${node}`, pos.x, pos.y - 8);
 
-            // Draw tile number (large, bottom)
-            this.ctx.font = 'bold 20px Arial';
-            this.ctx.fillText(`${tileInfo.tile}`, pos.x, pos.y + 10);
+            if (this.showTiles) {
+                // Show node number at top
+                this.ctx.fillText(`Node ${node}`, pos.x, pos.y - 12);
+
+                // Draw tile number as a little tile with background
+                const tileSize = 28;
+                const tileX = pos.x - tileSize / 2;
+                const tileY = pos.y + 2;
+
+                // Draw tile background (like a little square tile)
+                this.ctx.fillStyle = '#fff';
+                this.ctx.fillRect(tileX, tileY, tileSize, tileSize);
+
+                // Draw tile border
+                this.ctx.strokeStyle = '#333';
+                this.ctx.lineWidth = 2;
+                this.ctx.strokeRect(tileX, tileY, tileSize, tileSize);
+
+                // Draw tile number
+                this.ctx.fillStyle = '#333';
+                this.ctx.font = 'bold 18px Arial';
+                this.ctx.fillText(`${tileInfo.tile}`, pos.x, pos.y + 16);
+            } else {
+                // Preview mode - only show node number in center
+                this.ctx.fillText(`${node}`, pos.x, pos.y);
+            }
         }
     }
 

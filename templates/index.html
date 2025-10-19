@@ -21,6 +21,15 @@
             <!-- Control Panel -->
             <div class="control-panel">
                 <div class="controls-section">
+                    <h2>Game Mode</h2>
+                    <div class="mode-tabs">
+                        <button id="mode-single" class="mode-tab active">Single Player</button>
+                        <button id="mode-multi" class="mode-tab">Multiplayer</button>
+                    </div>
+                </div>
+
+                <!-- Single Player Setup -->
+                <div class="controls-section" id="single-player-setup">
                     <h2>Game Setup</h2>
                     <div class="control-group">
                         <label for="num-nodes">Number of Nodes:</label>
@@ -28,6 +37,59 @@
                     </div>
                     <button id="new-game-btn" class="btn btn-primary">New Random Game</button>
                     <button id="custom-graph-btn" class="btn btn-secondary">Custom Graph Editor</button>
+                </div>
+
+                <!-- Multiplayer Setup -->
+                <div class="controls-section hidden" id="multiplayer-setup">
+                    <h2>Multiplayer</h2>
+                    <div class="control-group">
+                        <label for="player-name">Your Name:</label>
+                        <input type="text" id="player-name" maxlength="20" placeholder="Enter your name">
+                    </div>
+                    <div class="control-group">
+                        <label for="game-mode-select">Mode:</label>
+                        <select id="game-mode-select">
+                            <option value="realtime">Real-Time Race</option>
+                            <option value="turnbased">Turn-Based</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="mp-num-nodes">Number of Nodes:</label>
+                        <input type="number" id="mp-num-nodes" min="3" max="15" value="6">
+                    </div>
+                    <button id="create-room-btn" class="btn btn-primary">Create Room</button>
+                    <div class="divider">OR</div>
+                    <div class="control-group">
+                        <label for="room-code">Room Code:</label>
+                        <input type="text" id="room-code" placeholder="TILE-XXXX" maxlength="9" style="text-transform: uppercase">
+                    </div>
+                    <button id="join-room-btn" class="btn btn-primary">Join Room</button>
+                </div>
+
+                <!-- Multiplayer Lobby -->
+                <div class="controls-section hidden" id="multiplayer-lobby">
+                    <h2>Room: <span id="lobby-room-code"></span></h2>
+                    <div class="lobby-info">
+                        <p><strong>Mode:</strong> <span id="lobby-mode"></span></p>
+                        <p><strong>Players:</strong> <span id="lobby-player-count"></span>/30</p>
+                    </div>
+                    <div id="lobby-players-list" class="players-list"></div>
+                    <div class="name-change-section">
+                        <input type="text" id="change-name-input" placeholder="Enter new name" maxlength="20">
+                        <button id="change-name-btn" class="btn btn-secondary btn-small">Change Name</button>
+                    </div>
+                    <div class="lobby-controls">
+                        <button id="toggle-ready-btn" class="btn btn-secondary">Ready</button>
+                        <button id="start-game-btn" class="btn btn-primary hidden">Start Game</button>
+                        <button id="leave-room-btn" class="btn btn-secondary">Leave Room</button>
+                    </div>
+                </div>
+
+                <!-- Multiplayer Leaderboard (during game) -->
+                <div class="controls-section hidden" id="multiplayer-leaderboard">
+                    <h2>Leaderboard</h2>
+                    <div id="leaderboard-list" class="leaderboard-list"></div>
+                    <button id="end-mp-game-btn" class="btn btn-secondary" style="margin-top: 10px;">Leave Game</button>
                 </div>
 
                 <div class="controls-section" id="game-controls">
@@ -123,6 +185,10 @@
     <!-- Hidden file input for loading games -->
     <input type="file" id="file-input" accept=".json" style="display: none;">
 
+    <!-- SocketIO client library -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
     <script src="{{ url_for('static', filename='game.js') }}"></script>
+    <script src="{{ url_for('static', filename='multiplayer.js') }}"></script>
 </body>
 </html>
